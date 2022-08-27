@@ -3,6 +3,7 @@ Revision history for {{$dist->name}}
 {{$NEXT}}
   - /pod/index.json will have sorted keys to reduce churn
   - The A<AUTHOR> tag can now include text A<text|AUTHOR>
+  - Added XOR->pods->add_sister_site method
 
 0.01      2022-08-26 23:02:01 -0600
   - initial version

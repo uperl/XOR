@@ -123,6 +123,26 @@ package XOR::Pods {
     }
   }
 
+=head2 add_sister_site
+
+=cut
+
+  sub add_sister_site ($self, $url) {
+    $url = URI->new($url) unless ref $url;
+    my $index_url = $url->clone;
+    $index_url->path("/pod/index.json");
+    say $url;
+    foreach my $dist (decode_json(XOR->new->web->get($index_url))->@*)
+    {
+      foreach my $pod ($dist->{pods}->@*)
+      {
+        my $pod_url = $url->clone;
+        $pod_url->path($pod->{href});
+        $self->{sister_pod}->{$pod->{name}}->{href} = $pod_url->as_string;
+      }
+    }
+  }
+
 =head2 generate_html
 
 =cut
@@ -233,7 +253,7 @@ package XOR::Pods {
 =cut
 
   sub get_link ($self, $name) {
-    $self->{pod}->{$name}->{href};
+    $self->{pod}->{$name}->{href} // $self->{sister_pod}->{$name}->{href};
   }
 
 }
