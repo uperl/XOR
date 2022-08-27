@@ -9,7 +9,7 @@ package XOR::Pods {
   use URI;
   use URI::file;
   use Path::Tiny ();
-  use JSON::MaybeXS qw( decode_json encode_json );
+  use JSON::MaybeXS qw( decode_json JSON );
   use Template;
   use XOR;
 
@@ -224,7 +224,7 @@ package XOR::Pods {
       }, \$html);
 
       $self->fs_root->child('index.html')->spew_utf8($html);
-      $self->fs_root->child('index.json')->spew_raw(encode_json(\@dists));
+      $self->fs_root->child('index.json')->spew_raw(JSON()->new->canonical->pretty->encode(\@dists));
     }
   }
 

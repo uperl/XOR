@@ -37,6 +37,11 @@ package XOR::Markdown {
       return qq{<a href="$href$fragment" class="module">$text</a>};
     });
 
+    $self->add_formatting_code( A => sub ($name) {
+      my $text = $name =~ s/^(.*)\|// ? $1 : $name;
+      return qq{<a href="https://metacpan.org/author/$name" class="cpan_author">$text</a>};
+    });
+
     $self;
   }
 
