@@ -20,7 +20,11 @@ $modules{$_} = $_ for qw(
   JSON::XS
   MetaCPAN::Client
   Path::Tiny
+  Plack::App::File
+  Plack::Middleware
+  Plack::Util::Accessor
   Template
+  Template::Plugin::Filter
   Test2::V0
   Text::Markdown::PerlExtensions
   URI
