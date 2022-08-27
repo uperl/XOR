@@ -51,10 +51,10 @@ package XOR::Markdown {
              $c =~ s/[ \t]*$//g; # trailing whitespace
              $c = $self->_EncodeCode($c);
             "<pre class=\"sh_$lang\">$c</pre>";
-        @egsx;  
+        @egsx;
 
     $text = $self->SUPER::_DoCodeSpans($text);
-  
+
     $text;
   }
 }

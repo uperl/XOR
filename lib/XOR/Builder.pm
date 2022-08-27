@@ -29,12 +29,12 @@ package XOR::Builder {
         return unless $md_path->basename =~ /\.md$/;
 
         my($html_path, undef, $template_name) = $md_path->basename =~ /^(.*?)(\.(.*))?\.md$/;
-        
+
         $template_name ||= 'simple';
         $html_path = $md_path->sibling($html_path . '.html');
-        
+
         my $out = '';
-        
+
         my @lines = $md_path->lines_utf8;
         my $title = 'alienfile.org';
         my $h1;
@@ -60,9 +60,9 @@ package XOR::Builder {
           },
           \$out,
         ) || die $tt->error;
-        
+
         say "  -> $html_path";
-        
+
         $html_path->spew_utf8($out);
 
       },

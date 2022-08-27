@@ -167,7 +167,7 @@ package XOR::Pods {
         pod   => $html,
         shjs  => "https://shjs.wdlabs.com"
       }, \$full_html);
-      
+
       $path->spew_utf8($full_html);
     }
 
@@ -182,7 +182,7 @@ package XOR::Pods {
     # generate the dist index
     {
       my @dists;
-    
+
       foreach my $dist_name (sort keys $self->{dist}->%*)
       {
         push @dists, { name => $dist_name, pods => [ map { { href => $self->get_link($_), name => $_ } } $self->{dist}->{$dist_name}->@* ] };
@@ -216,7 +216,7 @@ package XOR::Pods::HTML {
     $self->{pods};
   }
 
-  sub do_pod_link ($self, $link) 
+  sub do_pod_link ($self, $link)
   {
     if($link->tagname eq 'L' && $link->attr('type') eq 'pod') {
       my $to      = $link->attr('to');
