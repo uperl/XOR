@@ -93,6 +93,8 @@ package XOR::Pods {
         }
         else
         {
+          return if $path =~ /\.xs$/;
+          return if $path =~ /\/typemap$/;
           say "data: $path";
           $self->{data}->{$path} = $content;
         }
