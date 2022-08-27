@@ -7,10 +7,22 @@ package XOR::TarballList {
   use JSON::MaybeXS qw( decode_json );
   use XOR;
 
+=head1 CONSTRUCTOR
+
+=head2 new
+
+=cut
+
   sub new ($class)
   {
     bless {}, $class;
   }
+
+=head1 METHODS
+
+=head2 get
+
+=cut
 
   sub get ($self, $org)
   {

@@ -9,13 +9,25 @@ package XOR::Pods {
   use URI;
   use URI::file;
   use Path::Tiny ();
-  use JSON::MaybeXS qw( decode_json );
+  use JSON::MaybeXS qw( decode_json encode_json );
   use Template;
   use XOR;
+
+=head1 CONSTRUCTOR
+
+=head2 new
+
+=cut
 
   sub new ($class) {
     bless {}, $class;
   }
+
+=head1 METHODS
+
+=head2 current
+
+=cut
 
   sub current ($self, $new=undef) {
     if(defined $new) {
@@ -24,14 +36,26 @@ package XOR::Pods {
     $self->{current};
   }
 
+=head2 fs_root
+
+=cut
+
   sub fs_root ($self) {
     $self->{fs_root} ||= XOR->new->root->child('docs', 'pod');
   }
+
+=head2 url_prefix
+
+=cut
 
   sub url_prefix ($self, $new=undef) {
     $self->{url_prefix} = $new if defined $new;
     $self->{url_prefix} ||= "/pod/"
   }
+
+=head2 add_dist
+
+=cut
 
   sub add_dist ($self, $location) {
     my $url = -f $location ? URI::file->new(Path::Tiny->new($location)->absolute->stringify) : URI->new($location);
@@ -98,6 +122,10 @@ package XOR::Pods {
       warn "unknown dist for $url";
     }
   }
+
+=head2 generate_html
+
+=cut
 
   sub generate_html ($self) {
 
@@ -196,8 +224,13 @@ package XOR::Pods {
       }, \$html);
 
       $self->fs_root->child('index.html')->spew_utf8($html);
+      $self->fs_root->child('index.json')->spew_raw(encode_json(\@dists));
     }
   }
+
+=head2 get_link
+
+=cut
 
   sub get_link ($self, $name) {
     $self->{pod}->{$name}->{href};

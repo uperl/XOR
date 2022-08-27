@@ -7,6 +7,12 @@ package XOR::Markdown {
   use base 'Text::Markdown::PerlExtensions';
   use XOR;
 
+=head1 CONSTRUCTOR
+
+=head2 new
+
+=cut
+
   sub new ($class, @args)
   {
     my $self = $class->SUPER::new(@args);

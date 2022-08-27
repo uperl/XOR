@@ -11,10 +11,22 @@ package XOR::Web {
   use URI;
   use MetaCPAN::Client;
 
+=head1 CONSTRUCTOR
+
+=head2 new
+
+=cut
+
   sub new ($class)
   {
     bless {}, $class;
   }
+
+=head1 METHODS
+
+=head2 ua
+
+=cut
 
   sub ua ($self)
   {
@@ -33,10 +45,18 @@ package XOR::Web {
     };
   }
 
+=head2 mcpan
+
+=cut
+
   sub mcpan ($self)
   {
     $self->{mcpan} ||= MetaCPAN::Client->new(ua => $self->ua);
   }
+
+=head2 get
+
+=cut
 
   sub get ($self, $url)
   {
@@ -55,6 +75,3 @@ package XOR::Web {
 }
 
 1;
-
-
-

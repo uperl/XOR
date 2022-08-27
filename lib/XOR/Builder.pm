@@ -6,10 +6,22 @@ package XOR::Builder {
   use experimental qw( signatures );
   use XOR;
 
+=head1 CONSTRUCTOR
+
+=head2 new
+
+=cut
+
   sub new ($class)
   {
     bless {}, $class;
   }
+
+=head1 METHODS
+
+=head2 build
+
+=cut
 
   sub build ($self)
   {
@@ -17,7 +29,7 @@ package XOR::Builder {
     my $tt = $xor->tt;
     my $pods = $xor->pods;
 
-    foreach my $url (XOR->new->tarball_list->get('PerlAlien')->@*)
+    foreach my $url (XOR->new->tarball_list->get($xor->org)->@*)
     {
       $pods->add_dist($url);
     }
@@ -36,7 +48,7 @@ package XOR::Builder {
         my $out = '';
 
         my @lines = $md_path->lines_utf8;
-        my $title = 'alienfile.org';
+        my $title = $xor->site_name;
         my $h1;
 
         if($lines[0] =~ m/^#+\s*(\S.*)$/)
