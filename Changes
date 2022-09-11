@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+  - Added docs_root for use with nginx, apache etc.
+  - Make org optional for no POD
 
 0.02      2022-08-27 07:16:44 -0600
   - /pod/index.json will have sorted keys to reduce churn

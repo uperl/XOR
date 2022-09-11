@@ -27,16 +27,19 @@ package XOR::Builder {
   {
     my $xor = XOR->new;
     my $tt = $xor->tt;
-    my $pods = $xor->pods;
 
-    foreach my $url (XOR->new->tarball_list->get($xor->org)->@*)
+    if($xor->org)
     {
-      $pods->add_dist($url);
+      my $pods = $xor->pods;
+      foreach my $url (XOR->new->tarball_list->get($xor->org)->@*)
+      {
+        $pods->add_dist($url);
+      }
+      $pods->fs_root->remove_tree;
+      $pods->generate_html;
     }
-    $pods->fs_root->remove_tree;
-    $pods->generate_html;
 
-    $xor->root->child('docs')->visit(
+    $xor->docs_root->visit(
       sub ($md_path, $) {
         return unless $md_path->basename =~ /\.md$/;
 

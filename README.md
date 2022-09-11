@@ -22,6 +22,8 @@ Website builder for alienfile.org and others
 
 ## root
 
+## docs\_root
+
 ## org
 
 ## site\_name

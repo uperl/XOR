@@ -23,11 +23,24 @@ package XOR {
   sub new ($class, %args)
   {
     state $singleton;
-    $singleton ||= bless {
-      root      => Path::Tiny->new($args{root})->absolute,
-      org       => $args{org},
-      site_name => $args{site_name},
-    }, __PACKAGE__;
+    $singleton ||= do {
+      my $self = bless {
+        root      => Path::Tiny->new($args{root})->absolute,
+        org       => $args{org},
+        site_name => $args{site_name},
+      }, __PACKAGE__;
+
+      if(defined $args{docs_root})
+      {
+        $self->{docs_root} = Path::Tiny->new($args{docs_root})->absolute;
+      }
+      else
+      {
+        $self->{docs_root} = $self->root->child('docs');
+      }
+
+      $self;
+    };
   }
 
 =head1 METHODS
@@ -99,6 +112,15 @@ package XOR {
   sub root ($self)
   {
     $self->{root};
+  }
+
+=head2 docs_root
+
+=cut
+
+  sub docs_root ($self)
+  {
+    $self->{docs_root};
   }
 
 =head2 org

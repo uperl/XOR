@@ -41,7 +41,7 @@ package XOR::Pods {
 =cut
 
   sub fs_root ($self) {
-    $self->{fs_root} ||= XOR->new->root->child('docs', 'pod');
+    $self->{fs_root} ||= XOR->new->docs_root->child('pod');
   }
 
 =head2 url_prefix
