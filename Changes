@@ -1,6 +1,10 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+  - generate test.psgi
+  - Remove Plack::App::XOR
+  - Remove Plack::Middleware::XOR::DirIndex
+  - remove Plack::Middleware::XOR::NoCache
 
 0.05      2022-09-12 21:31:18 -0600
   - Add default favicon.ico

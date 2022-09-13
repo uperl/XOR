@@ -24,7 +24,7 @@ $modules{$_} = $_ for qw(
   Path::Tiny
   Plack::App::GitHubPages::Faux
   Plack::Builder
-  Plack::Middleware
+  Plack::Middleware::Headers
   Template
   Template::Plugin::Filter
   Test2::V0
