@@ -10,6 +10,12 @@ package XOR::Link {
   use XOR;
   use JSON::MaybeXS qw( decode_json );
 
+=head1 CONSTRUCTOR
+
+=head2 new
+
+=cut
+
   sub new ($class, $href, $name=undef)
   {
     $href = URI->new($href);
@@ -20,8 +26,20 @@ package XOR::Link {
     }, $class;
   }
 
+=head1 METHODS
+
+=head2 href
+
+=head2 name
+
+=cut
+
   sub href ($self) { $self->{href} }
   sub name ($self) { $self->{name} }
+
+=head2 fetch_site_links
+
+=cut
 
   sub fetch_site_links ($class, $url=undef)
   {
