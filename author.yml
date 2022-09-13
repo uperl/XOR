@@ -10,6 +10,7 @@ pod_spelling_system:
     - mcpan
     - tt
     - ua
+    - href
 
 pod_coverage:
   skip: 0
