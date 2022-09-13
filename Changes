@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+  - Add default favicon.ico
 
 0.04      2022-09-12 21:11:58 -0600
   - Added default templates

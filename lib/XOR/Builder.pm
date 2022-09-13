@@ -39,6 +39,11 @@ package XOR::Builder {
       $pods->generate_html;
     }
 
+    {
+      my $fav = $xor->docs_root->child('favicon.ico');
+      $xor->share_dir->child('favicon.ico')->copy($fav) unless -f $fav;
+    }
+
     $xor->docs_root->visit(
       sub ($md_path, $) {
         return unless $md_path->basename =~ /\.md$/;
