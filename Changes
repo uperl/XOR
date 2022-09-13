@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+0.06      2022-09-13 07:39:15 -0600
   - generate test.psgi
   - Remove Plack::App::XOR
   - Remove Plack::Middleware::XOR::DirIndex
