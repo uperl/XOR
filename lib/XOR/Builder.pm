@@ -44,6 +44,26 @@ package XOR::Builder {
       $xor->share_dir->child('favicon.ico')->copy($fav) unless -f $fav;
     }
 
+    {
+      my $test_psgi = $xor->root->child('test.psgi');
+      my $docs_root = $xor->docs_root->relative($test_psgi->parent);
+      $test_psgi->spew_utf8(
+        join("\n",
+          '#!/usr/bin/env perl',
+          '# warning, this file is generated',
+          'use strict;',
+          'use warnings;',
+          'use Plack::Builder;',
+          'use Plack::App::GitHubPages::Faux;',
+          'builder {',
+          '  enable "XOR::NoCache";',
+          "  Plack::App::GitHubPages::Faux->new( root => \"$docs_root\" )->to_app;",
+          '};',
+        )
+      );
+      chmod 0755, $test_psgi;
+    }
+
     $xor->docs_root->visit(
       sub ($md_path, $) {
         return unless $md_path->basename =~ /\.md$/;
