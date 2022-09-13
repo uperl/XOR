@@ -80,7 +80,7 @@ package XOR {
   {
     $self->{tt} ||= Template->new(
       WRAPPER            => 'wrapper.html.tt',
-      INCLUDE_PATH       => join(':', $self->root->child('template')->stringify, $self->share_dir->child('template')),
+      INCLUDE_PATH       => [map { $_->stringify } $self->root->child('templates'), $self->share_dir->child('templates')],
       render_die         => 1,
       TEMPLATE_EXTENSION => '.tt',
       ENCODING           => 'utf8',
@@ -160,7 +160,23 @@ package XOR {
   sub share_dir ($self)
   {
     require File::ShareDir::Dist;
-    $self->{share_dir} ||= Path::Tiny->new(File::ShareDir::Dist(dist_share(__PACKAGE__)))->absolute;
+    $self->{share_dir} ||= Path::Tiny->new(File::ShareDir::Dist::dist_share(__PACKAGE__))->absolute;
+  }
+
+=head2 common_vars
+
+=cut
+
+  sub common_vars ($self)
+  {
+    $self->{common_vars} //= {
+      shjs      => "https://shjs.wdlabs.com",
+      hatch     => "https://hatch.wdlabs.com",
+      site      => {
+        links => $self->site_links,
+      },
+    };
+    $self->{common_vars}->%*;
   }
 
 }

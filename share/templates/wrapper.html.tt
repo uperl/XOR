@@ -6,7 +6,7 @@
     <script type="text/javascript" src="[% shjs %]/sh_main.min.js"></script>
     <script type="text/javascript" src="[% shjs %]/lang/sh_perl.min.js"></script>
     <link type="text/css" rel="stylesheet" href="[% shjs %]/css/sh_acid.css">
-    <link type="text/css" rel="stylesheet" href="/css/default.css">
+    <link type="text/css" rel="stylesheet" href="[% hatch %]/css/default.css">
   </head>
   <body onload="sh_highlightDocument();">
     <div class="nx-header-flag-1"></div>
@@ -15,14 +15,15 @@
     [% content %]
     <div class="nx-footer">
       <p>
-        [% IF site.links %]
+        [%- IF site.links %]
         [
-          [% FOR link IN site.lins %]
-          <a href="[% link.href | url %]">[% link.name %]</a> [% UNLESS link.last %] | [% END %]
+          [%- FOR link IN site.links %]
+            <a href="[% link.href | url %]">[% link.name %]</a>[% UNLESS loop.last %] |[% END %]
+          [%- END %]
         ]
-        [% END %]
+        [%- END %]
         Copyright &copy; 2022 Graham Ollis
-        </p>
+      </p>
     </div>
   </body>
 </html>

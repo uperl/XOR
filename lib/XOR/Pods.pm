@@ -211,11 +211,12 @@ package XOR::Pods {
       }
 
       my $full_html;
-      XOR->new->tt->process('pod.html.tt', {
+      my $xor = XOR->new;
+      $xor->tt->process('pod.html.tt', {
         title => $name,
         h1    => $h1,
         pod   => $html,
-        shjs  => "https://shjs.wdlabs.com"
+        $xor->common_vars,
       }, \$full_html);
 
       $path->spew_utf8($full_html);
@@ -239,10 +240,11 @@ package XOR::Pods {
       }
 
       my $html;
-      XOR->new->tt->process('dist.html.tt', {
+      my $xor = XOR->new;
+      $xor->tt->process('dist.html.tt', {
         title => 'Documentation',
-        shjs  => "https://shjs.wdlabs.com",
         dists => \@dists,
+        $xor->common_vars,
       }, \$html);
 
       $self->fs_root->child('index.html')->spew_utf8($html);

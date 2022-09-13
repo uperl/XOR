@@ -60,9 +60,19 @@ package XOR::Builder {
           shift @lines;
         }
 
-        my $template_path = $xor->root->child("templates/$template_name.html.tt");
+        my $template_path;
+
+        foreach my $try (map { $_->child("templates/$template_name.html.tt") } $xor->root, $xor->share_dir)
+        {
+          if(-f $try)
+          {
+            $template_path = $try;
+            last;
+          }
+        }
+
+        die "no such tempalte $template_path" unless defined $template_path;
         say "$md_path ($template_path)";
-        die "no such tempalte $template_path" unless -f $template_path;
 
         my $html = $tt->process(
           $template_path->basename,
@@ -71,10 +81,7 @@ package XOR::Builder {
             h1        => $h1,
             markdown  => XOR->new->markdown->markdown(join('', @lines)),
             directory => $md_path->parent,
-            shjs      => "https://shjs.wdlabs.com",
-            site      => {
-              links => $xor->site_links,
-            },
+            $xor->common_vars,
           },
           \$out,
         ) || die $tt->error;
