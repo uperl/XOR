@@ -28,6 +28,10 @@ Website builder for alienfile.org and others
 
 ## site\_name
 
+## site\_links
+
+## share\_dir
+
 # AUTHOR
 
 Graham Ollis <plicease@cpan.org>

@@ -80,7 +80,7 @@ package XOR {
   {
     $self->{tt} ||= Template->new(
       WRAPPER            => 'wrapper.html.tt',
-      INCLUDE_PATH       => $self->root->child('templates')->stringify,
+      INCLUDE_PATH       => join(':', $self->root->child('template')->stringify, $self->share_dir->child('template')),
       render_die         => 1,
       TEMPLATE_EXTENSION => '.tt',
       ENCODING           => 'utf8',
@@ -139,6 +139,28 @@ package XOR {
   sub site_name ($self)
   {
     $self->{site_name};
+  }
+
+=head2 site_links
+
+=cut
+
+  sub site_links ($self)
+  {
+    $self->{site_links} //= do {
+      require XOR::Link;
+      [XOR::Link->fetch_site_links];
+    };
+  }
+
+=head2 share_dir
+
+=cut
+
+  sub share_dir ($self)
+  {
+    require File::ShareDir::Dist;
+    $self->{share_dir} ||= Path::Tiny->new(File::ShareDir::Dist(dist_share(__PACKAGE__)))->absolute;
   }
 
 }

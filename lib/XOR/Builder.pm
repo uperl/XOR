@@ -72,6 +72,9 @@ package XOR::Builder {
             markdown  => XOR->new->markdown->markdown(join('', @lines)),
             directory => $md_path->parent,
             shjs      => "https://shjs.wdlabs.com",
+            site      => {
+              links => $xor->site_links,
+            },
           },
           \$out,
         ) || die $tt->error;

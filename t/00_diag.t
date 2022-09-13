@@ -14,6 +14,8 @@ $modules{$_} = $_ for qw(
   CHI
   Cpanel::JSON::XS
   ExtUtils::MakeMaker
+  File::ShareDir::Dist
+  File::ShareDir::Install
   HTTP::Tiny::Mech
   JSON::MaybeXS
   JSON::PP
