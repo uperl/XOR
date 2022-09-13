@@ -23,6 +23,7 @@ $modules{$_} = $_ for qw(
   MetaCPAN::Client
   Path::Tiny
   Plack::App::GitHubPages::Faux
+  Plack::Builder
   Plack::Middleware
   Template
   Template::Plugin::Filter
