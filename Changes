@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+0.05      2022-09-12 21:31:18 -0600
   - Add default favicon.ico
 
 0.04      2022-09-12 21:11:58 -0600
