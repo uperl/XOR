@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+0.04      2022-09-12 21:11:58 -0600
   - Added default templates
   - Added $xor->site_links method
   - Added XOR::Link class
