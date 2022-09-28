@@ -35,6 +35,10 @@ package XOR::Builder {
       {
         $pods->add_dist($url);
       }
+    }
+
+    {
+      my $pods = $xor->pods;
       $pods->fs_root->remove_tree;
       $pods->generate_html;
     }

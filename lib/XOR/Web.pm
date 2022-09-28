@@ -37,6 +37,8 @@ package XOR::Web {
       HTTP::Tiny::Mech->new(
         mechua => WWW::Mechanize::Cached->new(
           cache => CHI->new(
+            # keep cache around for 24hrs
+            expires_in => 60*60*24,
             driver   => 'File',
             root_dir => $dir->stringify,
           ),

@@ -58,6 +58,8 @@ package XOR::Pods {
 =cut
 
   sub add_dist ($self, $location) {
+    $self->{at_least_one} = 1;
+
     my $url = -f $location ? URI::file->new(Path::Tiny->new($location)->absolute->stringify) : URI->new($location);
     say "$url";
     my $tarball = XOR->new->web->get($url);
@@ -150,6 +152,8 @@ package XOR::Pods {
 =cut
 
   sub generate_html ($self) {
+
+    return unless $self->{at_least_one};
 
     # write out each pod file as .html
     foreach my $name (sort keys $self->{pod}->%*)
