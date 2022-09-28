@@ -2,6 +2,9 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+0.07      2022-09-28 16:15:03 -0600
+  - Allow pod generation without org
+
 0.06      2022-09-13 07:39:15 -0600
   - generate test.psgi
   - Remove Plack::App::XOR
