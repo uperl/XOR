@@ -43,7 +43,7 @@ package XOR::Link {
 
   sub fetch_site_links ($class, $url=undef)
   {
-    $url //= "https://wdlabs.com/sites.json";
+    $url //= "https://www.wdlabs.com/sites.json";
     map { __PACKAGE__->new($_->{href}, $_->{name}) } decode_json(XOR->new->web->get($url))->@*;
   }
 
