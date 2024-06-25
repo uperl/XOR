@@ -2,6 +2,9 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+0.08      2024-06-25 16:29:34 -0700
+  - Update wdlabs.com -> www.wdlabs.com
+
 0.07      2022-09-28 16:15:03 -0600
   - Allow pod generation without org
 
