@@ -2,4 +2,7 @@ XOR-*
 /.build/
 *.swp
 
-
+/XOR-*
+/.build
+*.old
+*.orig
