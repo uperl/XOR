@@ -2,6 +2,9 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+0.09      2026-10-02 02:25:07 -0600
+  - workaround for metacpan api
+
 0.08      2024-06-25 16:29:34 -0700
   - Update wdlabs.com -> www.wdlabs.com
 
