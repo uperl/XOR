@@ -40,17 +40,15 @@ package XOR::TarballList {
         {
           next if $repo->{archived};
           my $name = $repo->{name};
-          my $set = $web->mcpan->release({ all => [ { distribution => $name }, { status => 'latest' } ] });
-          if($set->total > 1)
+          # fetch the latest release directly rather than using a search,
+          # which metacpan intermittently returns unfiltered (all releases)
+          my $release = eval { $web->mcpan->release($name) };
+          if(my $error = $@)
           {
-            die "latest release for $name returned @{[ $set->total ]} items";
-          }
-          elsif($set->total == 0)
-          {
+            die $error unless $error =~ /Not Found/;
             say STDERR "warning: no release for $name";
             next;
           }
-          my $release = $set->next;
           $repos{$name} = $release->download_url;
         }
       }
