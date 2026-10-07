@@ -87,7 +87,7 @@ have been created before rendering any C<< ME<lt>E<gt> >> links.
       my $name = $stuff;
       $text //= $name;
 
-      my $href = XOR->new->pods->get_link($name) // "https://metacpan.org/pod/$name$fragment";
+      my $href = XOR->new->pods->get_link($name) // "https://metacpan.org/pod/$name";
       return qq{<a href="$href$fragment" class="module">$text</a>};
     });
 

@@ -22,4 +22,9 @@ is(
   "<p><a href=\"https://metacpan.org/pod/PerlX::Define\" class=\"module\">PerlX::Define</a></p>\n",
 );
 
+is(
+  $md->markdown("M<PerlX::Define#SYNOPSIS>"),
+  "<p><a href=\"https://metacpan.org/pod/PerlX::Define#SYNOPSIS\" class=\"module\">PerlX::Define</a></p>\n",
+);
+
 done_testing;
