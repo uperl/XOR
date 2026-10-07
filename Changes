@@ -2,6 +2,8 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+0.10      2026-10-07 07:08:05 -0600
+
 0.09      2026-10-02 02:25:07 -0600
   - workaround for metacpan api
 
