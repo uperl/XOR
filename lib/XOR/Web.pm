@@ -1,5 +1,7 @@
 package XOR::Web {
 
+  # ABSTRACT: Cached web client
+
   use strict;
   use warnings;
   use 5.020;
@@ -11,9 +13,25 @@ package XOR::Web {
   use URI;
   use MetaCPAN::Client;
 
+=head1 SYNOPSIS
+
+ use XOR;
+
+ my $content = XOR->new->web->get('https://www.wdlabs.com/sites.json');
+
+=head1 DESCRIPTION
+
+This class provides a web client used for fetching tarballs and making
+API calls.  Responses are cached on disk in C<~/.xor/cache> for 24
+hours.  To force fresh responses you can remove that directory.
+
 =head1 CONSTRUCTOR
 
 =head2 new
+
+ my $web = XOR::Web->new;
+
+Create a new instance.
 
 =cut
 
@@ -25,6 +43,12 @@ package XOR::Web {
 =head1 METHODS
 
 =head2 ua
+
+ my $ua = $web->ua;
+
+Returns the user agent.  This is an L<HTTP::Tiny> compatible
+L<HTTP::Tiny::Mech> object using L<WWW::Mechanize::Cached> with a
+L<CHI> file cache.
 
 =cut
 
@@ -49,6 +73,11 @@ package XOR::Web {
 
 =head2 mcpan
 
+ my $mcpan = $web->mcpan;
+
+Returns a L<MetaCPAN::Client> instance which uses the caching
+L</ua>.
+
 =cut
 
   sub mcpan ($self)
@@ -57,6 +86,12 @@ package XOR::Web {
   }
 
 =head2 get
+
+ my $content = $web->get($url);
+
+Fetches C<$url> (a string or L<URI> object) and returns the content.
+C<file:> URLs are read directly from the filesystem without caching.
+Dies on error.
 
 =cut
 

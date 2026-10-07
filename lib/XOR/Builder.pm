@@ -1,14 +1,32 @@
 package XOR::Builder {
 
+  # ABSTRACT: Build the website
+
   use strict;
   use warnings;
   use 5.026;
   use experimental qw( signatures );
   use XOR;
 
+=head1 SYNOPSIS
+
+ use XOR;
+
+ XOR->new( root => '.', site_name => 'My Site' )->builder->build;
+
+=head1 DESCRIPTION
+
+This class builds the website, using the configuration from the L<XOR>
+singleton.  You will normally get an instance from
+L<XOR's builder method|XOR/builder>, rather than creating one directly.
+
 =head1 CONSTRUCTOR
 
 =head2 new
+
+ my $builder = XOR::Builder->new;
+
+Create a new builder instance.
 
 =cut
 
@@ -20,6 +38,72 @@ package XOR::Builder {
 =head1 METHODS
 
 =head2 build
+
+ $builder->build;
+
+Builds the website.  The C<XOR> singleton must already have been
+created.  This does the following:
+
+=over 4
+
+=item 1.
+
+If an L<org|XOR/org> was provided, then the latest CPAN tarball of each
+repository in that GitHub organization is added to L<XOR::Pods> using
+L<add_dist|XOR::Pods/add_dist>.
+
+=item 2.
+
+The C<pod> directory under L<docs_root|XOR/docs_root> is B<removed>, and
+the POD HTML is regenerated using
+L<generate_html|XOR::Pods/generate_html>.
+
+=item 3.
+
+The default C<favicon.ico> is copied into L<docs_root|XOR/docs_root>,
+unless one already exists there.
+
+=item 4.
+
+A C<test.psgi> is written to L<root|XOR/root>, which can be used to
+preview the site locally, for example with C<plackup test.psgi>.  This
+file is overwritten every time, so you should not edit it.
+
+=item 5.
+
+Every Markdown file under L<docs_root|XOR/docs_root> is rendered as HTML
+into the same directory.  A file named C<foo.md> is written to
+C<foo.html> using the C<simple.html.tt> template.  A different template
+can be selected by adding an extra extension: C<foo.bar.md> is written
+to C<foo.html> using the C<bar.html.tt> template.  If the first line of
+the Markdown file is a header, then it is removed from the content and
+used as the title and C<h1> of the page, otherwise the
+L<site_name|XOR/site_name> is used as the title.
+
+The template is processed with these variables, in addition to the
+L<common variables|XOR/common_vars>:
+
+=over 4
+
+=item title
+
+The page title.
+
+=item h1
+
+The page header, if any.
+
+=item markdown
+
+The content rendered as HTML by L<XOR::Markdown>.
+
+=item directory
+
+The directory containing the Markdown file, as a L<Path::Tiny> object.
+
+=back
+
+=back
 
 =cut
 
