@@ -11,6 +11,10 @@ pod_spelling_system:
     - tt
     - ua
     - href
+    - MetaCPAN
+    - renderer
+    - SHJS
+    - shjs
 
 pod_coverage:
   skip: 0
