@@ -30,7 +30,7 @@ alienfile.org and some other sites.  It does two things:
 - POD to HTML
 
     If an ["org"](#org) is given, then the latest CPAN release of each
-    (un-archived) repository in that GitHub organization is downloaded and
+    (non-archived) repository in that GitHub organization is downloaded and
     its POD is rendered into HTML under the `pod` directory of
     ["docs\_root"](#docs_root).  See [XOR::Pods](https://metacpan.org/pod/XOR::Pods) for the details.
 
