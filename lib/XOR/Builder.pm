@@ -192,7 +192,7 @@ The directory containing the Markdown file, as a L<Path::Tiny> object.
           {
             title     => $title,
             h1        => $h1,
-            markdown  => XOR->new->markdown->markdown(join('', @lines)),
+            markdown  => XOR->new->markdown->markdown(join('', @lines), { base => $md_path->parent }),
             directory => $md_path->parent,
             $xor->common_vars,
           },

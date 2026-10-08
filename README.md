@@ -4,15 +4,17 @@ Website builder for alienfile.org and others
 
 # SYNOPSIS
 
-    use XOR;
+```perl
+use XOR;
 
-    my $xor = XOR->new(
-      root      => '.',
-      org       => 'uperl',
-      site_name => 'My Site',
-    );
+my $xor = XOR->new(
+  root      => '.',
+  org       => 'uperl',
+  site_name => 'My Site',
+);
 
-    $xor->builder->build;
+$xor->builder->build;
+```
 
 # DESCRIPTION
 
@@ -23,14 +25,14 @@ alienfile.org and some other sites.  It does two things:
 
     Every `.md` file under ["docs\_root"](#docs_root) is rendered into an `.html` file
     in the same directory using [Template](https://metacpan.org/pod/Template) Toolkit templates.  See
-    [XOR::Builder](https://metacpan.org/pod/XOR%3A%3ABuilder) for the details.
+    [XOR::Builder](https://metacpan.org/pod/XOR::Builder) for the details.
 
 - POD to HTML
 
     If an ["org"](#org) is given, then the latest CPAN release of each
     (un-archived) repository in that GitHub organization is downloaded and
     its POD is rendered into HTML under the `pod` directory of
-    ["docs\_root"](#docs_root).  See [XOR::Pods](https://metacpan.org/pod/XOR%3A%3APods) for the details.
+    ["docs\_root"](#docs_root).  See [XOR::Pods](https://metacpan.org/pod/XOR::Pods) for the details.
 
 The `XOR` object is a singleton.  The first call to ["new"](#new) creates it,
 and all subsequent calls return the same object, ignoring any
@@ -45,7 +47,9 @@ Templates are searched for first in the `templates` directory under
 
 ## new
 
-    my $xor = XOR->new(%args);
+```perl
+my $xor = XOR->new(%args);
+```
 
 Creates the singleton instance, or returns it if it has already been
 created (in which case `%args` is ignored).  Supported arguments:
@@ -76,25 +80,33 @@ created (in which case `%args` is ignored).  Supported arguments:
 
 ## pods
 
-    my $pods = $xor->pods;
+```perl
+my $pods = $xor->pods;
+```
 
-Returns the [XOR::Pods](https://metacpan.org/pod/XOR%3A%3APods) instance used to render POD.
+Returns the [XOR::Pods](https://metacpan.org/pod/XOR::Pods) instance used to render POD.
 
 ## web
 
-    my $web = $xor->web;
+```perl
+my $web = $xor->web;
+```
 
-Returns the [XOR::Web](https://metacpan.org/pod/XOR%3A%3AWeb) instance used to make (cached) HTTP requests.
+Returns the [XOR::Web](https://metacpan.org/pod/XOR::Web) instance used to make (cached) HTTP requests.
 
 ## markdown
 
-    my $md = $xor->markdown;
+```perl
+my $md = $xor->markdown;
+```
 
-Returns the [XOR::Markdown](https://metacpan.org/pod/XOR%3A%3AMarkdown) instance used to render Markdown.
+Returns the [XOR::Markdown](https://metacpan.org/pod/XOR::Markdown) instance used to render Markdown.
 
 ## tt
 
-    my $tt = $xor->tt;
+```perl
+my $tt = $xor->tt;
+```
 
 Returns the [Template](https://metacpan.org/pod/Template) instance used to render pages.  It uses
 `wrapper.html.tt` as the wrapper template, and searches the
@@ -103,62 +115,80 @@ templates.
 
 ## tarball\_list
 
-    my $list = $xor->tarball_list;
+```perl
+my $list = $xor->tarball_list;
+```
 
-Returns the [XOR::TarballList](https://metacpan.org/pod/XOR%3A%3ATarballList) instance used to find CPAN tarballs for
+Returns the [XOR::TarballList](https://metacpan.org/pod/XOR::TarballList) instance used to find CPAN tarballs for
 the GitHub organization.
 
 ## builder
 
-    my $builder = $xor->builder;
+```perl
+my $builder = $xor->builder;
+```
 
-Returns the [XOR::Builder](https://metacpan.org/pod/XOR%3A%3ABuilder) instance used to build the site.
+Returns the [XOR::Builder](https://metacpan.org/pod/XOR::Builder) instance used to build the site.
 
 ## root
 
-    my $root = $xor->root;
+```perl
+my $root = $xor->root;
+```
 
 Returns the root directory of the website project as an absolute
-[Path::Tiny](https://metacpan.org/pod/Path%3A%3ATiny) object.
+[Path::Tiny](https://metacpan.org/pod/Path::Tiny) object.
 
 ## docs\_root
 
-    my $docs_root = $xor->docs_root;
+```perl
+my $docs_root = $xor->docs_root;
+```
 
 Returns the content directory of the website as an absolute
-[Path::Tiny](https://metacpan.org/pod/Path%3A%3ATiny) object.
+[Path::Tiny](https://metacpan.org/pod/Path::Tiny) object.
 
 ## org
 
-    my $org = $xor->org;
+```perl
+my $org = $xor->org;
+```
 
 Returns the GitHub organization, if any.
 
 ## site\_name
 
-    my $name = $xor->site_name;
+```perl
+my $name = $xor->site_name;
+```
 
 Returns the name of the site.
 
 ## site\_links
 
-    my $links = $xor->site_links;
+```perl
+my $links = $xor->site_links;
+```
 
-Returns an array reference of [XOR::Link](https://metacpan.org/pod/XOR%3A%3ALink) objects for sister sites,
+Returns an array reference of [XOR::Link](https://metacpan.org/pod/XOR::Link) objects for sister sites,
 which are fetched from [https://www.wdlabs.com/sites.json](https://www.wdlabs.com/sites.json).  These are
 rendered in the footer of the default wrapper template.
 
 ## share\_dir
 
-    my $dir = $xor->share_dir;
+```perl
+my $dir = $xor->share_dir;
+```
 
 Returns the share directory for this distribution as an absolute
-[Path::Tiny](https://metacpan.org/pod/Path%3A%3ATiny) object.  This contains the default templates and
+[Path::Tiny](https://metacpan.org/pod/Path::Tiny) object.  This contains the default templates and
 `favicon.ico`.
 
 ## common\_vars
 
-    my %vars = $xor->common_vars;
+```perl
+my %vars = $xor->common_vars;
+```
 
 Returns a list of key/value pairs which are passed into every
 template.  These include:

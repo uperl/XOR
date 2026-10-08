@@ -28,6 +28,7 @@ $modules{$_} = $_ for qw(
   Template
   Template::Plugin::Filter
   Test2::V0
+  Text::Markdown
   Text::Markdown::PerlExtensions
   URI
   URI::file

@@ -8,6 +8,9 @@ package XOR::Markdown {
   use experimental qw( signatures postderef );
   use base 'Text::Markdown::PerlExtensions';
   use XOR;
+  use JSON::MaybeXS ();
+  use Path::Tiny ();
+  use Text::Markdown ();
 
 =head1 SYNOPSIS
 
@@ -53,6 +56,52 @@ Code blocks with a language are rendered as
 C<< <pre class="sh_I<lang>"> >> so that they can be highlighted by
 SHJS.
 
+=item C<< TE<lt>file.jsonE<gt> >>
+
+=item C<< TE<lt>file.json|classE<gt> >>
+
+Render an HTML table from the data in C<file.json>.  This is a block
+level directive, so it must be on a line by itself.  The optional
+C<class> is used as the C<class> attribute of the C<< <table> >>.
+A relative path is resolved relative to the C<base> option given to
+L</markdown>, which is normally the directory containing the C<.md>
+file.
+
+The JSON file should contain an object with an optional C<header> and
+a required C<rows>:
+
+ {
+   "header": [ "Name", "Author" ],
+   "rows": [
+     [ "FFI::Platypus", "PLICEASE" ],
+     [ ["FFI::C", "https://metacpan.org/pod/FFI::C"], {"content":"PLICEASE"} ]
+   ]
+ }
+
+C<header> is a list of cells, which are rendered in a C<< <thead> >>
+as C<< <th> >> elements.  C<rows> is a list of rows, each of which is
+a list of cells, rendered in a C<< <tbody> >> as C<< <td> >> elements.
+Each cell may be any of these forms:
+
+=over 4
+
+=item C<"content">
+
+=item C<["content"]>
+
+=item C<["content","link"]>
+
+=item C<{"content":"content"}>
+
+=item C<{"content":"content","link":"link"}>
+
+=back
+
+The content is plain text, and is HTML escaped.  If a link is given,
+then the content is wrapped in an C<< <a> >> element.  Any error in the
+file, such as the file not existing, invalid JSON, or an incorrectly
+formed cell, is fatal.
+
 =back
 
 =head1 CONSTRUCTOR
@@ -64,6 +113,26 @@ SHJS.
 Create a new Markdown renderer.  Arguments are passed on to
 L<Text::Markdown::PerlExtensions>.  The C<XOR> singleton must already
 have been created before rendering any C<< ME<lt>E<gt> >> links.
+
+=head1 METHODS
+
+=head2 markdown
+
+ my $html = $md->markdown($text);
+ my $html = $md->markdown($text, \%options);
+
+Render the markdown C<$text> as HTML.  In addition to the options
+supported by L<Text::Markdown>, this option is supported:
+
+=over 4
+
+=item base
+
+The directory that relative C<< TE<lt>E<gt> >> paths are resolved
+relative to.  Rendering a C<< TE<lt>E<gt> >> with a relative path
+without this option is fatal.
+
+=back
 
 =cut
 
@@ -97,6 +166,110 @@ have been created before rendering any C<< ME<lt>E<gt> >> links.
     });
 
     $self;
+  }
+
+  sub _RunBlockGamut ($self, $text, @rest)
+  {
+    my $less_than_tab = $self->{tab_width} - 1;
+    $text =~ s{^[ ]{0,$less_than_tab}T<([^|>\n]+?)(?:\|([^>\n]+))?>[ \t]*$}{
+      my $html = $self->_table($1, $2);
+      my $key = Text::Markdown::_md5_utf8($html);
+      $self->{_html_blocks}{$key} = $html;
+      "\n\n$key\n\n";
+    }egm;
+    $self->SUPER::_RunBlockGamut($text, @rest);
+  }
+
+  sub _escape ($text)
+  {
+    $text =~ s/&/&amp;/g;
+    $text =~ s/</&lt;/g;
+    $text =~ s/>/&gt;/g;
+    $text =~ s/"/&quot;/g;
+    $text;
+  }
+
+  sub _table ($self, $file, $class)
+  {
+    my $path = Path::Tiny::path($file);
+    if($path->is_relative)
+    {
+      die "T<$file>: relative path with no base" unless defined $self->{base};
+      $path = Path::Tiny::path($self->{base})->child($path);
+    }
+
+    die "T<$file>: unable to read $path" unless -f $path;
+
+    my $data = eval { JSON::MaybeXS->new( utf8 => 1 )->decode($path->slurp_raw) };
+    die "T<$file>: invalid JSON in $path: $@" if $@;
+
+    my $error = sub ($msg) { die "T<$file>: $path: $msg" };
+
+    $error->("top level must be an object") unless ref $data eq 'HASH';
+    foreach my $key (sort keys %$data)
+    {
+      $error->("unknown key $key") unless $key =~ /^(header|rows)$/;
+    }
+
+    my $cell = sub ($tag, $cell, $where) {
+      my %cell;
+      if(!ref $cell)
+      {
+        %cell = ( content => $cell );
+      }
+      elsif(ref $cell eq 'ARRAY')
+      {
+        $error->("$where: cell array must have one or two elements") unless @$cell == 1 || @$cell == 2;
+        %cell = ( content => $cell->[0], link => $cell->[1] );
+        delete $cell{link} unless @$cell == 2;
+      }
+      elsif(ref $cell eq 'HASH')
+      {
+        foreach my $key (sort keys %$cell)
+        {
+          $error->("$where: unknown cell key $key") unless $key =~ /^(content|link)$/;
+        }
+        $error->("$where: cell object must have content") unless exists $cell->{content};
+        %cell = %$cell;
+      }
+      else
+      {
+        $error->("$where: cell must be a string, array or object");
+      }
+
+      foreach my $key (sort keys %cell)
+      {
+        $error->("$where: cell $key must be a string") unless defined $cell{$key} && !ref $cell{$key};
+      }
+
+      my $content = _escape($cell{content});
+      $content = sprintf '<a href="%s">%s</a>', _escape($cell{link}), $content if defined $cell{link};
+      "<$tag>$content</$tag>";
+    };
+
+    my $html = defined $class ? sprintf(qq{<table class="%s">\n}, _escape($class)) : "<table>\n";
+
+    if(exists $data->{header})
+    {
+      $error->("header must be an array") unless ref $data->{header} eq 'ARRAY';
+      my $i = 0;
+      $html .= "<thead>\n<tr>" . join('', map { $cell->('th', $_, "header[@{[ $i++ ]}]") } $data->{header}->@*) . "</tr>\n</thead>\n";
+    }
+
+    $error->("rows is required") unless exists $data->{rows};
+    $error->("rows must be an array") unless ref $data->{rows} eq 'ARRAY';
+    $html .= "<tbody>\n";
+    my $r = 0;
+    foreach my $row ($data->{rows}->@*)
+    {
+      $error->("rows[$r] must be an array") unless ref $row eq 'ARRAY';
+      my $c = 0;
+      $html .= "<tr>" . join('', map { $cell->('td', $_, "rows[$r][@{[ $c++ ]}]") } @$row) . "</tr>\n";
+      $r++;
+    }
+    $html .= "</tbody>\n</table>";
+
+    $html;
   }
 
   sub _DoCodeSpans ($self, $text)
